@@ -12,7 +12,6 @@ public class CheckoutService {
         List<Shippable> shippableItems = new ArrayList<>();
         double subtotal = 0;
 
-        // Loop through cart items and add to subtotal, collect shippable items
         for (CartItem item : cart.getItems()) {
             if (item.product.isExpired()) throw new Exception(item.product.getName() + " is expired.");
             if (item.quantity > item.product.getQuantity()) throw new Exception("Insufficient stock for " + item.product.getName());
@@ -20,7 +19,6 @@ public class CheckoutService {
             subtotal += item.getTotalPrice();
             if (item.product.isShippable()) {
                 Shippable shippable = (Shippable) item.product;
-                // Add the shippable item multiple times based on quantity
                 for (int i = 0; i < item.quantity; i++) {
                     shippableItems.add(shippable);
                 }
@@ -37,7 +35,6 @@ public class CheckoutService {
         }
         customer.deductBalance(total);
 
-        // Ship the collected items if any shippable items exist
         if (!shippableItems.isEmpty()) ShippingService.shipItems(shippableItems);
 
         System.out.println("** Checkout receipt **");
